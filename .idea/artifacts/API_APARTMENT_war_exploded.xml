@@ -1,0 +1,24 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="API-APARTMENT:war exploded">
+    <output-path>$PROJECT_DIR$/target/failanalysis</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="API-APARTMENT" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.6" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.4" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:8.5.6" />
+          <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.3.3" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.6" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/failanalysis/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="API-APARTMENT/web/Web" />
+    </root>
+  </artifact>
+</component>
