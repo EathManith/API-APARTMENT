@@ -4,6 +4,17 @@ public class Apartment {
     private long city_id, gu_id, dong_id;
     private String apart_id, city_name, gu_name, dong_name, apart_name, url_image;
 
+    public Apartment(String apart_id, String apart_name, long dong_id, long gu_id, long city_id, String url_image ) {
+            this.apart_id = apart_id;
+            this.apart_name = apart_name;
+            this.dong_id = dong_id;
+            this.gu_id = gu_id;
+            this.city_id = city_id;
+            this.url_image = url_image;
+    }
+
+    public  Apartment(){}
+
     public long getCity_id() {
         return city_id;
     }
