@@ -230,4 +230,49 @@ public class ApartmentDAO {
         return null;
     }
 
+    public boolean deleteApartmentInfo(String apartId){
+        String sql = "DELETE FROM tblApartment  WHERE apart_id = ?";
+        cnn = DBUtility.getConnection();
+        if (cnn != null) {
+            try {
+                PreparedStatement pstmt = cnn.prepareStatement(sql);
+                pstmt.setString(1, apartId);
+                if(pstmt.executeUpdate() > 0) {
+                   return true;
+                } else {
+                    return false;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No connection");
+        }
+        return false;
+    }
+
+    public boolean updateApartmentInfo(Apartment apartment) {
+        String sql = "UPDATE tblApartment SET url_image = ? " +
+                "WHERE apart_id = ?";
+        cnn = DBUtility.getConnection();
+        if (cnn != null) {
+            try {
+                PreparedStatement pstmt = cnn.prepareStatement(sql);
+                pstmt.setString(1, apartment.getApart_id());
+                pstmt.setString(2, apartment.getUrl_image());
+                if(pstmt.executeUpdate() > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No connection");
+        }
+        return false;
+    }
+
+
 }
