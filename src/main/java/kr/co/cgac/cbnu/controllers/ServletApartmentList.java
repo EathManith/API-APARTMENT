@@ -21,80 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 
-@WebServlet(name = "ServletApartmentList" , urlPatterns = {"/apartments", "/apartment"})
+@WebServlet(name = "ServletApartmentList" , urlPatterns = {"/all-apartments", "/apartmentId"})
 public class ServletApartmentList extends HttpServlet {
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("application/x-www-form-urlencoded; charset=UTF-8 application/json");
-//        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-//        String json = "";
-//        if(br != null){
-//            json = br.readLine();
-//        }
-//
-//        Gson gson = new Gson();
-//        Map<String,Object> map1 = new HashMap<String,Object>();
-//        map1 = (Map<String,Object>) gson.fromJson(json, map1.getClass());
-//        MachineFail machineFail = new MachineFail(map1.get("fId").toString(),
-//                map1.get("fLine").toString(),map1.get("fMachine").toString(),map1.get("downTime").toString(),
-//                map1.get("restartTime").toString(),map1.get("fCode").toString(),map1.get("fSubCode").toString(),
-//                map1.get("fDetail").toString(),map1.get("fPhen").toString(),map1.get("repairDetail").toString(),
-//                map1.get("worker").toString(),map1.get("workStart").toString(),map1.get("workEnd").toString(),
-//                Double.parseDouble(map1.get("workDuration").toString()));
-//        boolean result = new MachineFailDAO().addMachineFail(machineFail);
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        if (result) {
-//            map.put("STATUS", StatusCode.SUCCESS);
-//        } else {
-//            map.put("STATUS", StatusCode.NOT_SUCCESS);
-//        }
-//        response.getWriter().write(new Gson().toJson(map));
-//    }
-
-//    @Override
-//    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        resp.setContentType("application/x-www-form-urlencoded; charset=UTF-8 application/json");
-//        BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-//        String json = "";
-//        if(br != null){
-//            json = br.readLine();
-//        }
-//        Gson gson = new Gson();
-//        Map<String,Object> map1 = new HashMap<String,Object>();
-//        map1 = (Map<String,Object>) gson.fromJson(json, map1.getClass());
-//        MachineFail machineFail = new MachineFail(map1.get("fId").toString(),
-//                map1.get("fLine").toString(),map1.get("fMachine").toString(),map1.get("downTime").toString(),
-//                map1.get("restartTime").toString(),map1.get("fCode").toString(),map1.get("fSubCode").toString(),
-//                map1.get("fDetail").toString(),map1.get("fPhen").toString(),map1.get("repairDetail").toString(),
-//                map1.get("worker").toString(),map1.get("workStart").toString(),map1.get("workEnd").toString(),
-//                Double.parseDouble(map1.get("workDuration").toString()));
-//        boolean result = new MachineFailDAO().updateMachineFail(machineFail);
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        if (result) {
-//            map.put("STATUS", StatusCode.SUCCESS);
-//        } else {
-//            map.put("STATUS", StatusCode.NOT_SUCCESS);
-//        }
-//        resp.getWriter().write(new Gson().toJson(map));
-//    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/x-www-form-urlencoded; charset=UTF-8 application/json");
-        boolean result = new MachineFailDAO().deleteMachineFail(req.getParameter("id"));
-        Map<String, Object> map = new HashMap<String, Object>();
-        if (result) {
-            map.put("STATUS", StatusCode.SUCCESS);
-        } else {
-            map.put("STATUS", StatusCode.NOT_SUCCESS);
-        }
-        resp.getWriter().write(new Gson().toJson(map));
-    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/x-www-form-urlencoded; charset=UTF-8 application/json");
         response.setCharacterEncoding("UTF-8");
         String servletPath = request.getServletPath();
-        if (servletPath.equals("/apartments")) {
+        if (servletPath.equals("/all-apartments")) {
             Pagination pagination = new Pagination();
             pagination.setLimit(Integer.parseInt(request.getParameter("limit")));
             pagination.setPage(Integer.parseInt(request.getParameter("page")));
@@ -110,7 +44,7 @@ public class ServletApartmentList extends HttpServlet {
             }
             response.getWriter().write(new Gson().toJson(map));
         }
-        else if (servletPath.equals("/apartment")) {
+        else if (servletPath.equals("/apartmentId")) {
             long dongId = Long.parseLong(request.getParameter("dongId"));
             long guId = Long.parseLong(request.getParameter("guId"));
             long cityId = Long.parseLong(request.getParameter("cityId"));
@@ -125,5 +59,42 @@ public class ServletApartmentList extends HttpServlet {
             }
             response.getWriter().write(new Gson().toJson(map));
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/x-www-form-urlencoded; charset=UTF-8 application/json");
+        BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+        String json = "";
+        if(br != null){
+            json = br.readLine();
+        }
+        Gson gson = new Gson();
+        Map<String,Object> map1 = new HashMap<String,Object>();
+        map1 = (Map<String,Object>) gson.fromJson(json, map1.getClass());
+        Apartment apartment = new Apartment(map1.get("apart_id").toString(),
+                map1.get("apart_name").toString(), Long.parseLong(map1.get("dong_id").toString()),Long.parseLong(map1.get("gu_id").toString()),
+                Long.parseLong(map1.get("city_id").toString()),map1.get("url_image").toString());
+        boolean result = new ApartmentDAO().updateApartmentInfo(apartment);
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (result) {
+            map.put("STATUS", StatusCode.SUCCESS);
+        } else {
+            map.put("STATUS", StatusCode.NOT_SUCCESS);
+        }
+        resp.getWriter().write(new Gson().toJson(map));
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/x-www-form-urlencoded; charset=UTF-8 application/json");
+        boolean result = new ApartmentDAO().deleteApartmentInfo(req.getParameter("apart_id"));
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (result) {
+            map.put("STATUS", StatusCode.SUCCESS);
+        } else {
+            map.put("STATUS", StatusCode.NOT_SUCCESS);
+        }
+        resp.getWriter().write(new Gson().toJson(map));
     }
 }
