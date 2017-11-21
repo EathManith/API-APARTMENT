@@ -18,69 +18,42 @@ $(function () {
     });
 
     function clearTextbox() {
-        $("#txtId").val("");
-        $("#txtLine").val("");
-        $("#txtMachine").val("");
-        $("#txtDownTime").val("");
-        $("#txtRestartTime").val("");
-        $("#txtCode").val("");
-        $("#txtSubCode").val("");
-        $("#txtDetail").val("");
-        $("#txtPhen").val("");
-        $("#txtRepairDetail").val("");
-        $("#txtWorker").val("");
-        $("#txtWorkStart").val("");
-        $("#txtWorkEnd").val("");
-        $("#txtWorkDuration").val("");
+        $("#txtApartId").val("");
+        $("#txtApartName").val("");
+        $("#txtdongid").val("");
+        $("#txtGuId").val("");
+        $("#txtCityId").val("");
+        $("#file").val("");
     }
 
-    $("#btnAdd").click(function () {
+    $("#btnEdit").click(function () {
         var data = {
-            "fId": $("#txtId").val(),
-            "fLine": $("#txtLine").val(),
-            "fMachine": $("#txtMachine").val(),
-            "downTime": $("#txtDownTime").val(),
-            "restartTime": $("#txtRestartTime").val(),
-            "fCode": $("#txtCode").val(),
-            "fSubCode": $("#txtSubCode").val(),
-            "fDetail": $("#txtDetail").val(),
-            "fPhen": $("#txtPhen").val(),
-            "repairDetail": $("#txtRepairDetail").val(),
-            "worker": $("#txtWorker").val(),
-            "workStart": $("#txtWorkStart").val(),
-            "workEnd": $("#txtWorkEnd").val(),
-            "workDuration": $("#txtWorkDuration").val()
+            "apart_id": $("#txtApartId").val(),
+            "apart_name": $("#txtApartName").val(),
+            "dong_id": $("#txtdongid").val(),
+            "gu_id": $("#txtGuId").val(),
+            "city_id": $("#txtCityId").val(),
+            "url_image": $("#file").val()
         };
-        if (cmd == "Add") {
-            apartments.addMachineFail(data, function (response) {
+            apartments.upldateApartmentInfo(data, function (response) {
                 if (response.STATUS == "0000") {
                     checkPagination = true;
-                    apartments.getAllMachineFails();
-                } else {
-                    alert("There are a problem with insertion!");
-                }
-            });
-        } else {
-            apartments.updateMachineFail(data, function (response) {
-                if (response.STATUS == "0000") {
-                    checkPagination = true;
-                    apartments.getAllMachineFails();
+                    apartments.getAllApartments();
                 } else {
                     alert("There are a problem with edition!");
                 }
             });
-        }
         clearTextbox();
-        cmd = "Add";
-        $("#btnAdd").html(cmd);
+        cmd = "Edit";
+        $("#btnEdit").html(cmd);
     });
 
     $(document).on('click', '#btnDelete', function () {
         id = $(this).parents("tr").data("id");
-        apartments.deleteMachineFail(id, function (response) {
+        apartments.deleteApartmentInfo(id, function (response) {
             if (response.STATUS == "0000") {
                 checkPagination = true;
-                apartments.getAllMachineFails();
+                apartments.getAllApartments();
             } else {
                 alert("There are some problems with deletion!")
             }
@@ -88,25 +61,17 @@ $(function () {
     });
 
     $(document).on('click', '#btnEdit', function () {
-        cmd = "Edit";
-        $("#btnAdd").html(cmd);
+        cmd = "Save";
+        $("#btnEdit").html(cmd);
         id = $(this).parents("tr").data("id");
-        apartments.getAllMachineFail(id, function (response) {
+        apartments.getAllApartments(id, function (response) {
             if (response.STATUS == "0000") {
-                $("#txtId").val(response.DATA.fId);
-                $("#txtLine").val(response.DATA.fLine);
-                $("#txtMachine").val(response.DATA.fMachine);
-                $("#txtDownTime").val(response.DATA.downTime);
-                $("#txtRestartTime").val(response.DATA.restartTime);
-                $("#txtCode").val(response.DATA.fCode);
-                $("#txtSubCode").val(response.DATA.fSubCode);
-                $("#txtDetail").val(response.DATA.fDetail);
-                $("#txtPhen").val(response.DATA.fPhen);
-                $("#txtRepairDetail").val(response.DATA.repairDetail);
-                $("#txtWorker").val(response.DATA.worker);
-                $("#txtWorkStart").val(response.DATA.workStart);
-                $("#txtWorkEnd").val(response.DATA.workEnd);
-                $("#txtWorkDuration").val(response.DATA.workDuration);
+                $("#txtApartId").val(response.DATA.apart_id);
+                $("#txtApartName").val(response.DATA.fLine);
+                $("#txtDongId").val(response.DATA.fMachine);
+                $("#txtGuId").val(response.DATA.downTime);
+                $("#txtCityId").val(response.DATA.restartTime);
+                $("#file").val(response.DATA.fCode);
             } else {
                 alert("There are some problems with retrieval!")
             }
@@ -212,52 +177,31 @@ $(function () {
         });
     }
 
-    apartments.deleteMachineFail = function (id, callback) {
+    apartments.upldateApartmentInfo = function (data, callback) {
         $.ajax({
-            url: "/machine-fails?id="+id,
-            type: 'DELETE',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
-            },
-            success: function (response) {
-                if (callback) {
-                    callback(response);
-                }
-            },
-            error: function (data, status, err) {
-                console.log("error: " + data + " status: " + status + " err:" + err);
-            }
-        });
-    };
-
-    apartments.addMachineFail = function (data, callback) {
-        $.ajax({
-            url: "/machine-fails",
-            type: 'POST',
-            dataType: 'JSON',
-            data: JSON.stringify(data),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
-            },
-            success: function (response) {
-                if (callback) {
-                    callback(response);
-                }
-            },
-            error: function (data, status, err) {
-                console.log("error: " + data + " status: " + status + " err:" + err);
-            }
-        });
-    };
-
-    apartments.updateMachineFail = function (data, callback) {
-        $.ajax({
-            url: "/machine-fails",
+            url: "/all-apartments",
             type: 'PUT',
             dataType: 'JSON',
             data: JSON.stringify(data),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+            },
+            success: function (response) {
+                if (callback) {
+                    callback(response);
+                }
+            },
+            error: function (data, status, err) {
+                console.log("error: " + data + " status: " + status + " err:" + err);
+            }
+        });
+    }
+
+    apartments.deleteApartmentInfo = function (id, callback){
+        $.ajax({
+            url: "/all-apartments?apartId="+id,
+            type: 'DELETE',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-Type", "application/json");
