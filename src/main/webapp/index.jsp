@@ -19,7 +19,7 @@
         <input type="file" name="file" id="file" accept="image/*" multiple>
         <input type="button" value="send" id="send">
         <br/><br/>
-        <button id="btnAdd">Add (+)</button>
+        <button id="btnEdit">Edit</button>
         <br/>
         <hr/>
         <br/>
